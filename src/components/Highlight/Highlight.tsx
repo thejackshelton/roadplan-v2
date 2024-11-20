@@ -1,12 +1,12 @@
-import type { ClassList, PropsOf } from "@builder.io/qwik";
+import type { ClassList, PropsOf } from "@qwik.dev/core";
 import {
   $,
   component$,
   useSignal,
   useTask$,
   useVisibleTask$,
-} from "@builder.io/qwik";
-import { isDev } from "@builder.io/qwik/build";
+} from "@qwik.dev/core";
+import { isDev } from "@qwik.dev/core/build";
 import { getHighlighterCore } from "shiki";
 import css from "shiki/langs/css.mjs";
 import html from "shiki/langs/html.mjs";

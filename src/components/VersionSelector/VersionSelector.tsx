@@ -1,5 +1,5 @@
-import { component$, useComputed$, useSignal } from "@builder.io/qwik";
-import { useLocation, useNavigate } from "@builder.io/qwik-city";
+import { component$, useComputed$, useSignal } from "@qwik.dev/core";
+import { useLocation, useNavigate } from "@qwik.dev/router";
 import { ChevronIcon } from "../Icons/ChevronIcon";
 
 const paths = import.meta.glob("/src/routes/versions/**/*", { eager: true });

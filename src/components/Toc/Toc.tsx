@@ -1,5 +1,5 @@
-import { component$, useSignal } from "@builder.io/qwik";
-import { useContent } from "@builder.io/qwik-city";
+import { component$, useSignal } from "@qwik.dev/core";
+import { useContent } from "@qwik.dev/router";
 
 export const Toc = component$(() => {
   const { headings } = useContent();

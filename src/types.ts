@@ -1,3 +1,3 @@
-import { type ClassList } from "@builder.io/qwik";
+import { type ClassList } from "@qwik.dev/core";
 
 export type OmitSignalClass<T> = Omit<T, "class"> & { class?: ClassList };

@@ -1,9 +1,9 @@
-import { component$ } from "@builder.io/qwik";
+import { component$ } from "@qwik.dev/core";
 import {
   QwikCityProvider,
   RouterOutlet,
   ServiceWorkerRegister,
-} from "@builder.io/qwik-city";
+} from "@qwik.dev/router";
 import { RouterHead } from "./components/RouterHead/RouterHead";
 
 import "./global.scss";

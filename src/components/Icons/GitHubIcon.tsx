@@ -1,4 +1,4 @@
-import { component$ } from "@builder.io/qwik";
+import { component$ } from "@qwik.dev/core";
 
 export const GitHubIcon = component$<{ classes?: string }>(
   ({ classes = "w-8 h8" }) => {

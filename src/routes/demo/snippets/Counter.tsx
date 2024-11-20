@@ -1,6 +1,6 @@
 // This code is the actual code that is running in the counter below 👇
 
-import { component$, useSignal } from "@builder.io/qwik";
+import { component$, useSignal } from "@qwik.dev/core";
 
 export default component$(() => {
   const counter = useSignal(0);

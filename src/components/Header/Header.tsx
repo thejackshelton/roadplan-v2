@@ -1,5 +1,5 @@
 /* eslint-disable qwik/jsx-img */
-import { component$, useSignal } from "@builder.io/qwik";
+import { component$, useSignal } from "@qwik.dev/core";
 import { ThemeSelector } from "~/components/ThemeSelector/ThemeSelector";
 import { config } from "../../config";
 import { Aside } from "../Aside/Aside";

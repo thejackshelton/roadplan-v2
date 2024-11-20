@@ -5,8 +5,8 @@ import {
   useContextProvider,
   useStore,
   useVisibleTask$,
-} from "@builder.io/qwik";
-import { type RequestHandler } from "@builder.io/qwik-city";
+} from "@qwik.dev/core";
+import { type RequestHandler } from "@qwik.dev/router";
 import { Footer } from "~/components/Footer/Footer";
 import { Header } from "~/components/Header/Header";
 import { components } from "~/components/MdxComponents/MdxComponents";

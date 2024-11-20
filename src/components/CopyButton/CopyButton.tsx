@@ -1,5 +1,5 @@
-import type { QwikIntrinsicElements } from "@builder.io/qwik";
-import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
+import type { QwikIntrinsicElements } from "@qwik.dev/core";
+import { $, component$, useSignal, useTask$ } from "@qwik.dev/core";
 import { CheckIcon } from "../Icons/CheckIcon";
 import { CopyIcon } from "../Icons/CopyIcon";
 

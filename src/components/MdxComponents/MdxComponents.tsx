@@ -1,5 +1,5 @@
-import type { QwikIntrinsicElements } from "@builder.io/qwik";
-import { Slot, component$ } from "@builder.io/qwik";
+import type { QwikIntrinsicElements } from "@qwik.dev/core";
+import { Slot, component$ } from "@qwik.dev/core";
 import { CodeSnippet } from "../CodeSnippet/CodeSnippet";
 import { CopyButton } from "../CopyButton/CopyButton";
 

@@ -1,4 +1,4 @@
-import { component$, useContext } from "@builder.io/qwik";
+import { component$, useContext } from "@qwik.dev/core";
 import { ThemeDarkIcon } from "~/components/Icons/ThemeDarkIcon";
 import { ThemeLightIcon } from "~/components/Icons/ThemeLightIcon";
 import { StoreContext } from "~/routes/layout";

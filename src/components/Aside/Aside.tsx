@@ -1,5 +1,5 @@
-import { component$ } from "@builder.io/qwik";
-import { useContent } from "@builder.io/qwik-city";
+import { component$ } from "@qwik.dev/core";
+import { useContent } from "@qwik.dev/router";
 
 export const Aside = component$(() => {
   const { menu } = useContent();
