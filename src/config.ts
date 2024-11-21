@@ -1,5 +1,5 @@
 export const config = {
-  versionSelector: false,
+  versionSelector: true,
   title: "RoadPlan",
   tagline: "...",
   GitHub: "...",
