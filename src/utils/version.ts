@@ -1,5 +1,4 @@
-import path from "path";
-import fs from 'fs-extra';
+
 export interface Version {
 	id: string;
 	name: string;
@@ -9,12 +8,13 @@ export interface VersionMetadata {
 	versions: Version[];
 }
 
-export const fetchVersionMetadata = async (): Promise<VersionMetadata> => {
-	const versions = await fs.readFile(path.join(process.cwd(), 'src/routes/docs/legacy/versions.json'), 'utf-8');
+export const fetchVersionMetadata = async (origin: string): Promise<VersionMetadata> => {
+    const response = await fetch(`${origin}/docs/legacy/versions.json`);
+    const versions = await response.json();
 
-	return {
-		versions: JSON.parse(versions),
-	};
+    return {
+        versions,
+    };
 };
 
 // const paths = import.meta.glob("/src/routes/versions/**/*", { eager: true });

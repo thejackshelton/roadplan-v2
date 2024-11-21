@@ -37,7 +37,7 @@ useTask$(async ({ track }) => {
     track(() => currentVersion.value);
 
     if (isServer) {
-        const metadata = await fetchVersionMetadata();
+        const metadata = await fetchVersionMetadata(loc.url.origin);
         versions.value = metadata.versions;
     }
 

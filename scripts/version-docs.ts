@@ -18,6 +18,8 @@ async function createVersionedDocs(version: string): Promise<void> {
   }
 
   const versionsFilePath = path.join(siteDir, 'src/routes/docs/legacy/versions.json');
+  const publicVersionsFilePath = path.join(siteDir, 'public/docs/legacy/versions.json');
+
   const versions: string[] = await fs.pathExists(versionsFilePath)
     ? JSON.parse(await fs.readFile(versionsFilePath, 'utf-8'))
     : [];
@@ -43,7 +45,9 @@ async function createVersionedDocs(version: string): Promise<void> {
   }
 
   versions.unshift(version);
-  await fs.outputFile(versionsFilePath, JSON.stringify(versions, null, 2) + '\n');
+  const versionsJson = JSON.stringify(versions, null, 2) + '\n';
+  await fs.outputFile(versionsFilePath, versionsJson);
+  await fs.outputFile(publicVersionsFilePath, versionsJson);
 
   console.log(kleur.green().bold(`✓ Version ${version} created successfully`));
 }
