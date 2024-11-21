@@ -27,13 +27,14 @@ export default component$(() => {
         <RouterOutlet />
         <ServiceWorkerRegister />
         <script dangerouslySetInnerHTML={
-        `const version = localStorage.getItem("version");
+        `const version = localStorage.getItem("version") || "latest";
+        localStorage.setItem("version", version);
 		    const versionSelectEl = document.querySelector('[data-version-selector]');
 
 		console.log('version', version);
 		console.log('version select', versionSelectEl);
 
-		versionSelectEl.value = version || "";`
+		versionSelectEl.value = version;`
       } />
       </body>
     </QwikRouterProvider>

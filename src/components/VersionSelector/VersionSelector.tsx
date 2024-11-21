@@ -77,7 +77,7 @@ useTask$(async ({ track }) => {
 				document.cookie = `version=${selectedVersion};path=/;max-age=${maxAge}`;
 			}}
 		>
-			<option>latest</option>
+			<option selected value="latest">latest</option>
 			{versions.value.map((version) => (
 				<option selected={version.id === currentVersion.value} key={version.id} value={version.id}>
 					{version}
