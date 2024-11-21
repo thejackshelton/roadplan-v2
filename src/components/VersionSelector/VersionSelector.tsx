@@ -33,25 +33,33 @@ export const VersionSelector = component$(() => {
 		return null;
 	}
 
-	useTask$(async ({ track }) => {
-		track(() => currentVersion.value);
+useTask$(async ({ track }) => {
+    track(() => currentVersion.value);
 
-		if (isServer) {
-			const metadata = await fetchVersionMetadata();
-			versions.value = metadata.versions;
-		}
+    if (isServer) {
+        const metadata = await fetchVersionMetadata();
+        versions.value = metadata.versions;
+    }
 
-		if (isServer) return;
+    if (isServer) return;
 
-		localStorage.setItem("version", currentVersion.value);
+    localStorage.setItem("version", currentVersion.value);
 
-		const currentPath = loc.url.pathname.replace(/^\/docs\/[^/]+/, "") || "/";
-		const isLatestVersion = currentVersion.value === "latest";
-		const basePath = isLatestVersion
-			? "/docs"
-			: `/docs/legacy/v${currentVersion.value}`;
-		nav(`${basePath}${currentPath}`);
-	});
+    // Extract the path after the version segment
+    const pathMatch = loc.url.pathname.match(/\/docs(?:\/legacy\/v[^/]+)?(.+)/);
+    const currentPath = pathMatch ? pathMatch[1] : '/';
+
+    const isLatestVersion = currentVersion.value === "latest";
+    const basePath = isLatestVersion
+        ? "/docs"
+        : `/docs/legacy/v${currentVersion.value}`;
+
+    if (currentVersion.value === "latest") {
+        nav(`/docs${currentPath}`);
+    } else {
+        nav(`${basePath}${currentPath}`);
+    }
+});
 
 	return (
 		<select
@@ -69,6 +77,7 @@ export const VersionSelector = component$(() => {
 				document.cookie = `version=${selectedVersion};path=/;max-age=${maxAge}`;
 			}}
 		>
+			<option>latest</option>
 			{versions.value.map((version) => (
 				<option selected={version.id === currentVersion.value} key={version.id} value={version.id}>
 					{version}
