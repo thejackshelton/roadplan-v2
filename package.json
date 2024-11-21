@@ -12,9 +12,9 @@
     "build": "qwik build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
-    "build.server": "vite build -c adapters/cloudflare-pages/vite.config.mts",
+    "build.server": "vite build -c adapters/netlify-edge/vite.config.mts",
     "build.types": "tsc --incremental --noEmit",
-    "deploy": "wrangler pages deploy ./dist",
+    "deploy": "netlify deploy --build",
     "dev": "vite --mode ssr",
     "dev.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
     "docs:version": "tsx scripts/version-docs.ts",
@@ -27,6 +27,7 @@
     "qwik": "qwik"
   },
   "devDependencies": {
+    "@netlify/edge-functions": "^2.0.0",
     "@qwik.dev/core": "2.0.0-alpha.1",
     "@qwik.dev/router": "2.0.0-alpha.1",
     "@types/eslint": "^8.56.7",
@@ -40,6 +41,7 @@
     "eslint-plugin-qwik": "1.9",
     "fs-extra": "^11.2.0",
     "kleur": "^4.1.5",
+    "netlify-cli": "^15.0.0",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.13",
