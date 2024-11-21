@@ -9,6 +9,7 @@ export interface VersionMetadata {
 }
 
 export const fetchVersionMetadata = async (): Promise<VersionMetadata> => {
+	
 	return {
 		defaultVersion: "v2",
 		versions: [

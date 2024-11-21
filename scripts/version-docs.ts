@@ -12,13 +12,12 @@ if (!version) {
 async function createVersionedDocs(version: string): Promise<void> {
   const siteDir = process.cwd();
   const docsPath = 'src/routes/docs';
-  const sidebarPath = 'src/config/sidebar.json';
   
   if (!/^\d+\.\d+(\.\d+)?(-\w+)?$/.test(version)) {
     throw new Error('Invalid version format. Please use semantic versioning (e.g., 1.3.0)');
   }
 
-  const versionsFilePath = path.join(siteDir, 'versioned_docs', 'versions.json');
+  const versionsFilePath = path.join(siteDir, 'src/routes/docs/legacy/versions.json');
   const versions: string[] = await fs.pathExists(versionsFilePath)
     ? JSON.parse(await fs.readFile(versionsFilePath, 'utf-8'))
     : [];
@@ -28,25 +27,21 @@ async function createVersionedDocs(version: string): Promise<void> {
   }
 
   const docsDir = path.resolve(siteDir, docsPath);
-  const versionedDocsDir = path.join(siteDir, 'versioned_docs', `version-${version}`);
+  const versionedDocsDir = path.join(siteDir, 'src/routes/docs/legacy', `v${version}`);
 
   if (!(await fs.pathExists(docsDir))) {
     throw new Error(`No docs found in ${docsDir}`);
   }
 
-  await fs.copy(docsDir, versionedDocsDir);
-
-  // sidebar stuff if we end up needing it
-  if (await fs.pathExists(sidebarPath)) {
-    const versionedSidebarPath = path.join(
-      siteDir,
-      'versioned_sidebars',
-      `version-${version}-sidebars.json`
-    );
-    await fs.copy(sidebarPath, versionedSidebarPath);
+  const entries = await fs.readdir(docsDir);
+  for (const entry of entries) {
+    if (entry !== 'legacy') {
+      const sourcePath = path.join(docsDir, entry);
+      const targetPath = path.join(versionedDocsDir, entry);
+      await fs.copy(sourcePath, targetPath);
+    }
   }
 
-  // this is what deals with versions.json
   versions.unshift(version);
   await fs.outputFile(versionsFilePath, JSON.stringify(versions, null, 2) + '\n');
 
