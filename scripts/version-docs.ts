@@ -18,7 +18,8 @@ async function createVersionedDocs(version: string): Promise<void> {
   }
 
   const versionsFilePath = path.join(siteDir, 'src/routes/docs/legacy/versions.json');
-
+  const publicVersionsPath = path.join(siteDir, 'public/docs/legacy/versions.json');
+  
   const versions: string[] = await fs.pathExists(versionsFilePath)
     ? JSON.parse(await fs.readFile(versionsFilePath, 'utf-8'))
     : [];
@@ -26,6 +27,17 @@ async function createVersionedDocs(version: string): Promise<void> {
   if (versions.includes(version)) {
     throw new Error(`Version ${version} already exists`);
   }
+
+  versions.unshift(version);
+  const versionsJson = JSON.stringify(versions, null, 2) + '\n';
+
+  // Ensure both directories exist
+  await fs.ensureDir(path.dirname(versionsFilePath));
+  await fs.ensureDir(path.dirname(publicVersionsPath));
+
+  // Write to both locations
+  await fs.outputFile(versionsFilePath, versionsJson);
+  await fs.outputFile(publicVersionsPath, versionsJson);
 
   const docsDir = path.resolve(siteDir, docsPath);
   const versionedDocsDir = path.join(siteDir, 'src/routes/docs/legacy', `v${version}`);
@@ -36,16 +48,12 @@ async function createVersionedDocs(version: string): Promise<void> {
 
   const entries = await fs.readdir(docsDir);
   for (const entry of entries) {
-    if (entry !== 'legacy') {
+    if (entry !== 'legacy' && entry !== 'menu.md') {
       const sourcePath = path.join(docsDir, entry);
       const targetPath = path.join(versionedDocsDir, entry);
       await fs.copy(sourcePath, targetPath);
     }
   }
-
-  versions.unshift(version);
-  const versionsJson = JSON.stringify(versions, null, 2) + '\n';
-  await fs.outputFile(versionsFilePath, versionsJson);
 
   console.log(kleur.green().bold(`✓ Version ${version} created successfully`));
 }

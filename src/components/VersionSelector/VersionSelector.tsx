@@ -1,7 +1,6 @@
 import { component$, useSignal, useTask$ } from "@qwik.dev/core";
 import { useLocation, useNavigate } from "@qwik.dev/router";
 import { isServer } from "@qwik.dev/core/build";
-import { fetchVersionMetadata } from "~/utils/version";
 
 export const VersionSelector = component$(() => {
 	const versions = useSignal<any[]>([]);
@@ -37,8 +36,20 @@ useTask$(async ({ track }) => {
     track(() => currentVersion.value);
 
     if (isServer) {
-        const metadata = await fetchVersionMetadata(loc.url.origin);
-        versions.value = metadata.versions;
+		const newUrl = new URL(loc.url.origin + '/docs/legacy/versions.json');
+
+		try {
+			const response = await fetch(newUrl);
+			if (!response.ok) {
+				throw new Error(`Failed to fetch versions: ${response.statusText}`);
+			}
+	
+			const metadata = await response.json();
+			console.log('version metadata', metadata);
+			versions.value = metadata;
+		} catch (error) {
+			console.error('Error reading versions:', error);
+		}
     }
 
     if (isServer) return;
@@ -67,19 +78,19 @@ useTask$(async ({ track }) => {
 			class="p-2 border rounded"
 			onChange$={(e) => {
 				const select = e.target as HTMLSelectElement;
-				const selectedVersion = select.value;
-
-				console.log('current version', selectedVersion);
-
-				currentVersion.value = selectedVersion;
+				currentVersion.value = select.value;
 
 				const maxAge = 30 * 24 * 60 * 60;
-				document.cookie = `version=${selectedVersion};path=/;max-age=${maxAge}`;
+				document.cookie = `version=${select.value};path=/;max-age=${maxAge}`;
 			}}
 		>
 			<option selected value="latest">latest</option>
 			{versions.value.map((version) => (
-				<option selected={version.id === currentVersion.value} key={version.id} value={version.id}>
+				<option 
+					selected={version === currentVersion.value} 
+					key={version} 
+					value={version}
+				>
 					{version}
 				</option>
 			))}

@@ -1,32 +1,49 @@
+import { server$ } from '@qwik.dev/router';
 
 export interface Version {
-	id: string;
-	name: string;
+    id: string;
+    name: string;
 }
 
 export interface VersionMetadata {
-	versions: Version[];
+    versions: Version[];
 }
 
+// Create a server-side function to read versions.json
+export const getServerVersions = server$(async (origin: string) => {
+    try {
+		console.log('url', origin);
+        const response = await fetch(`/docs/legacy/versions.json`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch versions: ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error reading versions:', error);
+        return { versions: [] };
+    }
+});
+
 export const fetchVersionMetadata = async (origin: string): Promise<VersionMetadata> => {
-    const response = await fetch(`${origin}/docs/legacy/versions.json`);
-    const versions = await response.json();
+    try {
+        // For SSR, use the server function
+        if (typeof window === 'undefined') {
+            return await getServerVersions(origin);
+        }
 
-    return {
-        versions,
-    };
+        // For client-side, use fetch
+        const response = await fetch(`${origin}/docs/legacy/versions.json`);
+		console.log('RESPONSE', response);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch versions: ${response.statusText}`);
+        }
+        
+        const versions = await response.json();
+		console.log('version metadata', versions);
+        return { versions };
+    } catch (error) {
+        console.error('Error fetching version metadata:', error);
+        return { versions: [] };
+    }
 };
-
-// const paths = import.meta.glob("/src/routes/versions/**/*", { eager: true });
-
-// let versions = Object.keys(paths)
-//   .filter((path) => path.indexOf("/src/routes/versions/") === 0)
-//   .map((path) => {
-//     path = path.replace("/src/routes/versions/", "");
-//     const folders = path.split("/");
-//     return folders[0];
-//   })
-//   .filter((path) => path.indexOf(".mdx") === -1)
-//   .sort((a, b) => (b === "latest" ? 1 : a > b ? -1 : 1));
-
-// versions = [...new Set(versions)];
