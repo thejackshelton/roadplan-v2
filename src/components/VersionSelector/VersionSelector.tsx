@@ -5,7 +5,7 @@ import { fetchVersionMetadata } from "~/utils/version";
 
 export const VersionSelector = component$(() => {
 	const versions = useSignal<any[]>([]);
-	const currentVersion = useSignal("v1");
+	const currentVersion = useSignal("");
 	const nav = useNavigate();
 	const loc = useLocation();
 	const isHome = loc.url.pathname === "/";
@@ -36,8 +36,10 @@ export const VersionSelector = component$(() => {
 	useTask$(async ({ track }) => {
 		track(() => currentVersion.value);
 
-		const metadata = await fetchVersionMetadata();
-		versions.value = metadata.versions;
+		if (isServer) {
+			const metadata = await fetchVersionMetadata();
+			versions.value = metadata.versions;
+		}
 
 		if (isServer) return;
 
@@ -47,17 +49,19 @@ export const VersionSelector = component$(() => {
 		const isLatestVersion = currentVersion.value === "latest";
 		const basePath = isLatestVersion
 			? "/docs"
-			: `/docs/${currentVersion.value}`;
+			: `/docs/legacy/v${currentVersion.value}`;
 		nav(`${basePath}${currentPath}`);
 	});
 
 	return (
 		<select
-			value={currentVersion.value}
+			data-version-selector
 			class="p-2 border rounded"
 			onChange$={(e) => {
 				const select = e.target as HTMLSelectElement;
 				const selectedVersion = select.value;
+
+				console.log('current version', selectedVersion);
 
 				currentVersion.value = selectedVersion;
 
@@ -66,8 +70,8 @@ export const VersionSelector = component$(() => {
 			}}
 		>
 			{versions.value.map((version) => (
-				<option key={version.id} value={version.id}>
-					{version.name}
+				<option selected={version.id === currentVersion.value} key={version.id} value={version.id}>
+					{version}
 				</option>
 			))}
 		</select>

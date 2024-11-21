@@ -1,21 +1,19 @@
+import path from "path";
+import fs from 'fs-extra';
 export interface Version {
 	id: string;
 	name: string;
 }
 
 export interface VersionMetadata {
-	defaultVersion: string;
 	versions: Version[];
 }
 
 export const fetchVersionMetadata = async (): Promise<VersionMetadata> => {
-	
+	const versions = await fs.readFile(path.join(process.cwd(), 'src/routes/docs/legacy/versions.json'), 'utf-8');
+
 	return {
-		defaultVersion: "v2",
-		versions: [
-			{ id: "v1", name: "Version 1" },
-			{ id: "v2", name: "Version 2" },
-		],
+		versions: JSON.parse(versions),
 	};
 };
 

@@ -26,6 +26,15 @@ export default component$(() => {
       <body lang="en">
         <RouterOutlet />
         <ServiceWorkerRegister />
+        <script dangerouslySetInnerHTML={
+        `const version = localStorage.getItem("version");
+		    const versionSelectEl = document.querySelector('[data-version-selector]');
+
+		console.log('version', version);
+		console.log('version select', versionSelectEl);
+
+		versionSelectEl.value = version || "";`
+      } />
       </body>
     </QwikCityProvider>
   );
