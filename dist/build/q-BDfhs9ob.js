@@ -1,1 +1,0 @@
-import{d as l,F as n}from"./q-Cu9Su6G1.js";const t=()=>l(n,null,null,[l("h1",null,null,"Page Not Found",3,null),l("p",null,null,"We could not find what you were looking for.",3,null),l("p",null,null,"Please contact the owner of the site that linked you to the original URL and let them know their link is broken.",3,null)],3,"lT_0");export{t as s_zzz0uHx6HJU};

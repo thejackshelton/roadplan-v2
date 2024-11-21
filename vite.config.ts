@@ -1,8 +1,7 @@
-import { qwikCity } from "@qwik.dev/router/vite";
+import { qwikRouter } from "@qwik.dev/router/vite";
 import { qwikVite } from "@qwik.dev/core/optimizer";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { recmaProvideComponents } from "./recma-provide-components";
 
 export default defineConfig(async () => {
   const { default: rehypePrettyCode } = await import("rehype-pretty-code");
@@ -10,7 +9,7 @@ export default defineConfig(async () => {
 
   return {
     plugins: [
-      qwikCity({
+      qwikRouter({
         mdxPlugins: {
           rehypeSyntaxHighlight: false,
           remarkGfm: true,
@@ -18,7 +17,6 @@ export default defineConfig(async () => {
         },
         mdx: {
           providerImportSource: "~/state/MDXProvider",
-          recmaPlugins: [recmaProvideComponents],
           rehypePlugins: [
             () => (tree) => {
               visit(tree, (node) => {

@@ -1,1 +1,0 @@
-const t={text:"RoadPlan",items:[{text:"First",items:[{text:"Getting-Started",href:"/docs/getting-started/"}]},{text:"Second",items:[{text:"Getting-Started",href:"/docs/getting-started/"}]}]};export{t as default};

@@ -1,6 +1,6 @@
 import { component$ } from "@qwik.dev/core";
 import {
-  QwikCityProvider,
+  QwikRouterProvider,
   RouterOutlet,
   ServiceWorkerRegister,
 } from "@qwik.dev/router";
@@ -17,7 +17,7 @@ export default component$(() => {
    */
 
   return (
-    <QwikCityProvider>
+    <QwikRouterProvider>
       <head>
         <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.json" />
@@ -36,6 +36,6 @@ export default component$(() => {
 		versionSelectEl.value = version || "";`
       } />
       </body>
-    </QwikCityProvider>
+    </QwikRouterProvider>
   );
 });
