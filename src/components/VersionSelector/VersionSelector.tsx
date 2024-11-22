@@ -1,13 +1,15 @@
 import { component$, useSignal, useTask$ } from "@qwik.dev/core";
 import { useLocation, useNavigate } from "@qwik.dev/router";
 import { isServer } from "@qwik.dev/core/build";
+import { Select } from '@qwik-ui/headless'
 
 export const VersionSelector = component$(() => {
-	const versions = useSignal<any[]>([]);
+	const versions = useSignal<string[]>([]);
 	const currentVersion = useSignal("");
 	const nav = useNavigate();
 	const loc = useLocation();
 	const isHome = loc.url.pathname === "/";
+	
 
 	/**
 	 *
@@ -73,28 +75,25 @@ useTask$(async ({ track }) => {
 });
 
 	return (
-		<select
-			data-version-selector
-			class="p-2 border rounded"
-			onChange$={(e) => {
-				const select = e.target as HTMLSelectElement;
-				currentVersion.value = select.value;
+		<>
+		<Select.Root onChange$={(value: string) => {
+				currentVersion.value = value;
 
 				const maxAge = 30 * 24 * 60 * 60;
-				document.cookie = `version=${select.value};path=/;max-age=${maxAge}`;
-			}}
-		>
-			<option selected value="latest">latest</option>
-			{versions.value.map((version) => (
-				<option 
-					selected={version === currentVersion.value} 
-					key={version} 
-					value={version}
-				>
-					{version}
-				</option>
-			))}
-		</select>
+				document.cookie = `version=${value};path=/;max-age=${maxAge}`;
+			}}>
+		<Select.Trigger class="h-[30px] text-white bg-slate-600 w-fit px-10">
+				{currentVersion.value || "latest"}
+			</Select.Trigger>
+			<Select.Popover class="select-popover">
+				{versions.value.map((version) => (
+				<Select.Item class="select-item" key={version}>
+					<Select.ItemLabel>{version}</Select.ItemLabel>
+				</Select.Item>
+				))}
+      </Select.Popover>
+		</Select.Root>
+		</>
 	);
 });
 
