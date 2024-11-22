@@ -1,4 +1,4 @@
-import { $, component$, useOnDocument } from "@qwik.dev/core";
+import { component$, useVisibleTask$ } from "@qwik.dev/core";
 import {
   QwikRouterProvider,
   RouterOutlet,
@@ -9,11 +9,13 @@ import { ModulePreload } from "./components/module-preload/module-preload";
 import "./global.scss";
 
 export default component$(() => {
-  useOnDocument('qinit', $(async () => {
-    // Force immediate loading of all route chunks
-    const allRoutes = import.meta.glob('/src/routes/**/*.tsx');
-    await Promise.all(Object.values(allRoutes).map(route => route()));
-  }));
+  useVisibleTask$(async () => {
+    // Simpler approach - just preload the routes
+    const routes = import.meta.glob('/src/routes/**/*.tsx');
+    for (const path in routes) {
+      routes[path]();
+    }
+  }, { strategy: 'document-ready' });
 
   /**
    * The root of a QwikCity site always start with the <QwikCityProvider> component,
