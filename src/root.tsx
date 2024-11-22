@@ -10,13 +10,34 @@ import "./global.scss";
 
 export default component$(() => {
   useVisibleTask$(async () => {
-    // Simpler approach - just preload the routes
-    const routes = import.meta.glob('/src/routes/**/*.tsx');
-    for (const path in routes) {
-      routes[path]();
-    }
-  }, { strategy: 'document-ready' });
+    // Get all route modules (both tsx and mdx)
+    const routes = {
+      ...import.meta.glob('/src/routes/**/*.tsx'),
+      ...import.meta.glob('/src/routes/**/*.mdx'),
+      ...import.meta.glob('/src/routes/**/*.md')
+    };
+    
+    // Rest of the code remains the same
+    const preloadRoutes = (entries: [string, () => Promise<unknown>][]) => {
+      if (entries.length === 0) return;
+      
+      const [_, loader] = entries[0];
+      _;
+      const remaining = entries.slice(1);
+      
+      loader().then(() => {
+        if (remaining.length > 0) {
+          if (window.requestIdleCallback) {
+            window.requestIdleCallback(() => preloadRoutes(remaining));
+          } else {
+            setTimeout(() => preloadRoutes(remaining), 1);
+          }
+        }
+      });
+    };
 
+    preloadRoutes(Object.entries(routes));
+  }, { strategy: 'document-ready' });
   /**
    * The root of a QwikCity site always start with the <QwikCityProvider> component,
    * immediately followed by the document's <head> and <body>.
