@@ -2,9 +2,9 @@ import { component$ } from "@qwik.dev/core";
 import {
   QwikRouterProvider,
   RouterOutlet,
-  ServiceWorkerRegister,
 } from "@qwik.dev/router";
 import { RouterHead } from "./components/RouterHead/RouterHead";
+import { ModulePreload } from "./components/module-preload/module-preload";
 
 import "./global.scss";
 
@@ -24,8 +24,8 @@ export default component$(() => {
         <RouterHead />
       </head>
       <body lang="en">
+        <ModulePreload />
         <RouterOutlet />
-        <ServiceWorkerRegister />
         <script dangerouslySetInnerHTML={
         `const version = localStorage.getItem("version") || "latest";
         localStorage.setItem("version", version);
